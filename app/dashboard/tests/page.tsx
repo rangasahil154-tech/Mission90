@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../../lib/firebase";
+import { getTests } from "../../../lib/tests";
 
 type Test = {
   id: string;
   title: string;
   subject: string;
   link: string;
+  password: string;
 };
 
 export default function TestsPage() {
@@ -16,18 +16,26 @@ export default function TestsPage() {
 
   useEffect(() => {
     async function loadTests() {
-      const snapshot = await getDocs(collection(db, "tests"));
-
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<Test, "id">),
-      }));
-
-      setTests(data);
+      const data = await getTests();
+      setTests(data as Test[]);
     }
 
     loadTests();
   }, []);
+
+  const openTest = (test: Test) => {
+    const enteredPassword = prompt(
+      `Enter password for "${test.title}"`
+    );
+
+    if (enteredPassword === null) return;
+
+    if (enteredPassword === test.password) {
+      window.open(test.link, "_blank");
+    } else {
+      alert("❌ Incorrect Password");
+    }
+  };
 
   return (
     <main className="min-h-screen bg-pink-50 p-10">
@@ -56,14 +64,12 @@ export default function TestsPage() {
                 Subject: {test.subject}
               </p>
 
-              <a
-                href={test.link}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => openTest(test)}
                 className="inline-block mt-5 bg-pink-600 text-white px-5 py-2 rounded-lg hover:bg-pink-700"
               >
-                Open Test
-              </a>
+                🔒 Open Test
+              </button>
             </div>
           ))
         )}
