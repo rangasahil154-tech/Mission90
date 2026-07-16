@@ -17,6 +17,13 @@ export default function AdminSidebar() {
         </Link>
 
         <Link
+          href="/admin/students"
+          className="text-gray-800 hover:text-pink-600"
+        >
+          👨‍🎓 Students
+        </Link>
+
+        <Link
           href="/admin/notes"
           className="text-gray-800 hover:text-pink-600"
         >
@@ -30,6 +37,12 @@ export default function AdminSidebar() {
           📝 Tests
         </Link>
 
+        <Link
+  href="/admin/notices"
+  className="text-gray-800 hover:text-pink-600"
+>
+  📢 Notice Board
+</Link>
         <Link
           href="/admin/profile"
           className="text-gray-800 hover:text-pink-600"
